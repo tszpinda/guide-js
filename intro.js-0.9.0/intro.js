@@ -885,7 +885,6 @@
    * @returns Element's position info
    */
   function _getOffset(element) {
-	 var jqOffset = $(element).offset();
     var elementPosition = {};
 
     //set width
@@ -893,9 +892,19 @@
 
     //set height
     elementPosition.height = element.offsetHeight;
-	
-	 elementPosition.left = jqOffset.left;
-	 elementPosition.top= jqOffset.top;
+
+    //calculate element top and left
+    var _x = 0;
+    var _y = 0;
+    while (element && !isNaN(element.offsetLeft) && !isNaN(element.offsetTop)) {
+      _x += element.offsetLeft;
+      _y += element.offsetTop;
+      element = element.offsetParent;
+    }
+    //set top
+    elementPosition.top = _y;
+    //set left
+    elementPosition.left = _x;
 
     return elementPosition;
   }
